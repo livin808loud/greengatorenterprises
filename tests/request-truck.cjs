@@ -16,6 +16,36 @@ const path = require('node:path');
       await page.locator(`input[name="${group}"][value="Unsure"]`).check();
     }
     await page.locator('#q-timing').selectOption('Appointment-only');
+    // Early-stage requests can start with ZIPs and tentative timing.
+    for (const id of ['q-paddress','q-daddress','q-date','q-ddate','q-pwindow','q-dwindow']) {
+      const field = page.locator('#'+id);
+      const original = await field.inputValue();
+      await field.fill('');
+      assert.equal(await field.evaluate(e=>e.required),false, id+' must allow an unknown detail');
+      await field.fill(original);
+    }
+    for (const id of ['q-paddress-unknown','q-daddress-unknown','q-delivery-flexible','q-weight-estimated']) await page.locator('#'+id).check();
+    await page.locator('#q-shipment-type').selectOption('Recurring route');
+    const extra = await page.locator('#quoteForm').evaluate(f=>Object.fromEntries(new FormData(f)));
+    assert.equal(extra['Shipment type'],'Recurring route');
+    assert.equal(extra['Weight is estimated'],'Yes');
+    assert.equal(extra['Delivery date flexible'],'Yes');
+    assert.equal(extra['Pickup exact address unavailable'],'Yes');
+    assert.equal(extra['Delivery exact address unavailable'],'Yes');
+    const tentative = {};
+    for (const id of ['q-paddress','q-daddress','q-date','q-ddate','q-pwindow','q-dwindow']) {
+      tentative[id] = await page.locator('#'+id).inputValue();
+      await page.locator('#'+id).fill('');
+    }
+    await page.locator('#q-timing').selectOption('Unsure');
+    assert.equal(await page.locator('#quoteForm').evaluate(f=>f.checkValidity()),true,'Tentative request must be valid without exact addresses or dates');
+    for (const [id,value] of Object.entries(tentative)) await page.locator('#'+id).fill(value);
+    await page.locator('#q-timing').selectOption('Appointment-only');
+    assert.deepEqual(await page.locator('#q-shipment-type option').evaluateAll(els=>els.slice(1).map(e=>e.value)),['One-time shipment','Recurring route','Overflow / backup capacity']);
+    const limits = await page.locator('#freight-limits').textContent();
+    for (const text of ['8,800','2,500','94','individual pallet']) assert.ok(limits.includes(text),text);
+    assert.equal(await page.locator('#quoteSuccess a[href="tel:+17067269949"]').count(),1);
+    assert.equal(await page.locator('#quoteSuccess a[href="sms:+17067269949"]').count(),1);
     assert.equal(await page.locator('#quoteForm').evaluate(f=>f.checkValidity()),true);
     const data = await page.locator('#quoteForm').evaluate(f=>Object.fromEntries(new FormData(f)));
     assert.equal(data['Pickup address'],'123 Test Street, Augusta, GA');

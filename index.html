@@ -454,11 +454,11 @@
             </label>
           </div>
           <div class="form-row">
-            <label>Pickup address
-              <input type="text" id="q-paddress" name="Pickup address" placeholder="Street address, city, state" required>
+            <label>Pickup address or city/state (optional)
+              <input type="text" id="q-paddress" name="Pickup address" placeholder="Street address or city, state">
             </label>
-            <label>Delivery address
-              <input type="text" id="q-daddress" name="Delivery address" placeholder="Street address, city, state" required>
+            <label>Delivery address or city/state (optional)
+              <input type="text" id="q-daddress" name="Delivery address" placeholder="Street address or city, state">
             </label>
           </div>
           <div class="form-row">
@@ -469,6 +469,21 @@
               <input type="text" id="q-dzip" name="Delivery ZIP" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="30901" required>
             </label>
           </div>
+          <div class="radio-group">
+            <label><input type="checkbox" id="q-paddress-unknown" name="Pickup exact address unavailable" value="Yes"> Pickup exact address not available yet</label>
+            <label><input type="checkbox" id="q-daddress-unknown" name="Delivery exact address unavailable" value="Yes"> Delivery exact address not available yet</label>
+          </div>
+          <p class="quote-note">Just exploring a lane? ZIP codes are enough to start. Exact addresses and timing can be confirmed before booking.</p>
+          <div class="form-row">
+            <label>One-time or recurring? (optional)
+              <select id="q-shipment-type" name="Shipment type">
+                <option value="">Choose request type</option>
+                <option value="One-time shipment">One-time shipment</option>
+                <option value="Recurring route">Recurring route</option>
+                <option value="Overflow / backup capacity">Overflow / backup capacity</option>
+              </select>
+            </label>
+          </div>
           <div class="form-row">
             <label>Number of Pallets
               <input type="number" id="q-pallets" name="Pallets" min="1" placeholder="e.g. 4">
@@ -477,6 +492,10 @@
               <input type="number" id="q-weight" name="Weight (lbs)" min="1" placeholder="e.g. 2500">
             </label>
           </div>
+          <div class="radio-group">
+            <label><input type="checkbox" id="q-weight-estimated" name="Weight is estimated" value="Yes"> Weight is estimated</label>
+          </div>
+          <p class="quote-note" id="freight-limits">Equipment limits: 8,800 lbs total freight capacity · 2,500 lbs liftgate capacity · 94″ × 94″ door clearance. For liftgate service, the weight of each individual pallet matters—not just the shipment total. Add individual pallet weights in the notes if known; final fit and loading requirements must be confirmed before booking.</p>
           <div class="form-row">
             <label>Freight / Commodity
               <input type="text" id="q-commodity" name="Freight / Commodity" placeholder="e.g. palletized dry goods">
@@ -486,19 +505,22 @@
             </label>
           </div>
           <div class="form-row">
-            <label>Pickup date
-              <input type="date" id="q-date" name="Date Requested" required>
+            <label>Pickup date (if known)
+              <input type="date" id="q-date" name="Date Requested">
             </label>
-            <label>Delivery date
-              <input type="date" id="q-ddate" name="Delivery date" required>
+            <label>Delivery date (if known)
+              <input type="date" id="q-ddate" name="Delivery date">
             </label>
           </div>
+          <div class="radio-group">
+            <label><input type="checkbox" id="q-delivery-flexible" name="Delivery date flexible" value="Yes"> Delivery date is flexible</label>
+          </div>
           <div class="form-row">
-            <label>Pickup time window
-              <input type="text" id="q-pwindow" name="Pickup time window" placeholder="e.g. 8 AM–noon Eastern" required>
+            <label>Pickup time window (if known)
+              <input type="text" id="q-pwindow" name="Pickup time window" placeholder="e.g. 8 AM–noon Eastern">
             </label>
-            <label>Delivery time window
-              <input type="text" id="q-dwindow" name="Delivery time window" placeholder="e.g. 1–4 PM Eastern" required>
+            <label>Delivery time window (if known)
+              <input type="text" id="q-dwindow" name="Delivery time window" placeholder="e.g. 1–4 PM Eastern">
             </label>
           </div>
           <div class="form-row">
@@ -553,6 +575,11 @@
         <div id="quoteSuccess" style="display:none;text-align:center;padding:40px 20px;">
           <div style="font-family:var(--font-mono);color:var(--green);font-size:14px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Request Sent</div>
           <p style="color:var(--ink);font-size:16px;">Your request has been received. I'll contact you to confirm availability and pricing. Your truck is not booked until we agree on the details.</p>
+          <p class="quote-note" style="margin-top:18px;">Need an answer sooner? Call or text me at (706) 726-9949. If I'm driving or handling freight, I'll respond as soon as I safely can.</p>
+          <div class="hero-ctas" style="justify-content:center;margin-top:16px;">
+            <a class="btn-primary" href="tel:+17067269949">Call me</a>
+            <a class="btn-secondary" href="sms:+17067269949">Text me</a>
+          </div>
         </div>
       </div>
       <div class="contact-actions">
