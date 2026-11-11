@@ -234,7 +234,8 @@
   .quote-form input[type="number"],
   .quote-form input[type="tel"],
   .quote-form input[type="date"],
-  .quote-form input[type="email"]{
+  .quote-form input[type="email"],
+  .quote-form select{
     background:var(--bg);border:1px solid var(--panel-line);border-radius:3px;
     color:var(--ink);font-family:var(--font-body);font-size:16px;padding:11px 12px;
   }
@@ -273,7 +274,7 @@
       <a href="#area">Service Area</a>
       <a href="#why">Why Us</a>
       <a href="#faq">FAQ</a>
-      <a href="#quote">Request a Quote</a>
+      <a href="#quote">Request a Truck</a>
       <a class="call-btn" href="tel:+17067269949">CALL FOR A QUOTE</a>
     </nav>
   </div>
@@ -288,7 +289,7 @@
     <div class="hero-ctas">
       <a href="tel:+17067269949" class="btn-primary">CALL (706) 726-9949</a>
       <a href="sms:+17067269949" class="btn-secondary">TEXT ME</a>
-      <a href="#quote" class="btn-secondary">Request a Quote</a>
+      <a href="#quote" class="btn-secondary">Request a Truck</a>
     </div>
     <div class="placards">
       <div class="placard"><span>USDOT / MC</span><b>4110201 · 1569745</b></div>
@@ -438,11 +439,11 @@
   <div class="wrap">
     <div class="contact-panel">
       <div>
-        <div class="kicker">Request a Quote</div>
+        <div class="kicker">Request a Truck</div>
         <h2>Have freight moving in the <span style="color:var(--green);">CSRA</span>?</h2>
         <p class="section-desc">Tell me about the load. Pickup, dropoff, and what's moving. You'll hear back the same business day.</p>
         <form class="quote-form" id="quoteForm" action="https://formspree.io/f/mgawllzv" method="POST" style="margin-top:26px;">
-          <input type="hidden" name="_subject" value="Quote Request - Green Gator Enterprises">
+          <input type="hidden" name="_subject" value="Truck Request - Green Gator Enterprises">
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
           <div class="form-row">
             <label>Full Name
@@ -450,6 +451,14 @@
             </label>
             <label>Company Name
               <input type="text" id="q-company" name="Company" placeholder="Company or organization">
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Pickup address
+              <input type="text" id="q-paddress" name="Pickup address" placeholder="Street address, city, state" required>
+            </label>
+            <label>Delivery address
+              <input type="text" id="q-daddress" name="Delivery address" placeholder="Street address, city, state" required>
             </label>
           </div>
           <div class="form-row">
@@ -472,22 +481,54 @@
             <label>Freight / Commodity
               <input type="text" id="q-commodity" name="Freight / Commodity" placeholder="e.g. palletized dry goods">
             </label>
-            <label>Date Requested
-              <input type="date" id="q-date" name="Date Requested">
+            <label>Pallet dimensions (optional)
+              <input type="text" id="q-dimensions" name="Pallet dimensions" placeholder="L × W × H in inches; note mixed sizes">
             </label>
           </div>
+          <div class="form-row">
+            <label>Pickup date
+              <input type="date" id="q-date" name="Date Requested" required>
+            </label>
+            <label>Delivery date
+              <input type="date" id="q-ddate" name="Delivery date" required>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Pickup time window
+              <input type="text" id="q-pwindow" name="Pickup time window" placeholder="e.g. 8 AM–noon Eastern" required>
+            </label>
+            <label>Delivery time window
+              <input type="text" id="q-dwindow" name="Delivery time window" placeholder="e.g. 1–4 PM Eastern" required>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Timing flexibility
+              <select id="q-timing" name="Timing flexibility" required>
+                <option value="">Choose timing needs</option>
+                <option value="Flexible">Flexible</option>
+                <option value="Appointment-only">Appointment-only</option>
+                <option value="Mixed — see notes">Mixed — see notes</option>
+                <option value="Unsure">Unsure</option>
+              </select>
+            </label>
+          </div>
+          <p class="quote-note">Include the time zone. For mixed timing, add each location's appointment or flexibility details in the notes.</p>
           <div class="form-row stack">
-            <span class="form-group-label">Pickup</span>
-            <div class="radio-group">
-              <label><input type="radio" name="Pickup" value="Loading dock" checked> Loading dock</label>
+            <span class="form-group-label" id="pickup-access-label">Pickup access</span>
+            <div class="radio-group" role="radiogroup" aria-labelledby="pickup-access-label">
+              <label><input type="radio" name="Pickup" value="Loading dock" required> Loading dock</label>
+              <label><input type="radio" name="Pickup" value="Forklift available"> Forklift available</label>
               <label><input type="radio" name="Pickup" value="Liftgate needed"> Liftgate needed</label>
+              <label><input type="radio" name="Pickup" value="Unsure"> Unsure</label>
             </div>
           </div>
           <div class="form-row stack">
-            <span class="form-group-label">Dropoff</span>
-            <div class="radio-group">
-              <label><input type="radio" name="Dropoff" value="Loading dock" checked> Loading dock</label>
+            <span class="form-group-label" id="delivery-access-label">Delivery access</span>
+            <div class="radio-group" role="radiogroup" aria-labelledby="delivery-access-label">
+              <label><input type="radio" name="Dropoff" value="Loading dock" required> Loading dock</label>
+              <label><input type="radio" name="Dropoff" value="Forklift available"> Forklift available</label>
               <label><input type="radio" name="Dropoff" value="Liftgate needed"> Liftgate needed</label>
+              <label><input type="radio" name="Dropoff" value="Unsure"> Unsure</label>
             </div>
           </div>
           <p class="quote-note">Truck clearance is 94" x 94". Flag it in the notes below if your freight runs larger.</p>
@@ -505,13 +546,13 @@
               <textarea id="q-notes" name="Additional Notes" rows="3" placeholder="Anything else I should know" style="background:var(--bg);border:1px solid var(--panel-line);border-radius:3px;color:var(--ink);font-family:var(--font-body);font-size:16px;padding:11px 12px;resize:vertical;"></textarea>
             </label>
           </div>
-          <button type="submit" class="quote-submit" id="quoteSubmitBtn">Request a Quote</button>
+          <button type="submit" class="quote-submit" id="quoteSubmitBtn">Request a Truck</button>
           <p class="quote-note">Submits directly to me. You'll see a confirmation below once it's sent.</p>
           <p class="quote-note" style="margin-top:2px;">By submitting, you agree to be contacted about your request by phone, text, or email. Your details are used only to respond to this inquiry. Submissions are processed securely through our form provider and are never sold or used for unrelated marketing. Submitting a request does not confirm a booking until I reply and terms are agreed upon.</p>
         </form>
         <div id="quoteSuccess" style="display:none;text-align:center;padding:40px 20px;">
           <div style="font-family:var(--font-mono);color:var(--green);font-size:14px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Request Sent</div>
-          <p style="color:var(--ink);font-size:16px;">Thanks, your quote request is in. I'll get back to you the same business day.</p>
+          <p style="color:var(--ink);font-size:16px;">Your request has been received. I'll contact you to confirm availability and pricing. Your truck is not booked until we agree on the details.</p>
         </div>
       </div>
       <div class="contact-actions">
@@ -636,6 +677,7 @@
     var email = document.getElementById('q-email').value.trim();
 
     if(!phone && !email){
+      quoteError.textContent = 'Please provide a phone number or an email so I can reach you back.';
       quoteError.style.display = 'block';
       document.getElementById('q-phone').focus();
       return;
@@ -658,7 +700,7 @@
       }
     }).catch(function(){
       quoteSubmitBtn.disabled = false;
-      quoteSubmitBtn.textContent = 'Request a Quote';
+      quoteSubmitBtn.textContent = 'Request a Truck';
       quoteError.textContent = 'Something went wrong sending this. Please call or text me directly instead.';
       quoteError.style.display = 'block';
     });
