@@ -40,7 +40,7 @@
     src:local('Barlow Condensed');
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth;scroll-padding-top:40px;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
   body{
     background:var(--bg);
     color:var(--ink);
@@ -63,19 +63,29 @@
   header{
     position:sticky;top:0;z-index:50;
     background:rgba(10,13,10,0.92);
+    -webkit-backdrop-filter:blur(8px);
     backdrop-filter:blur(8px);
     border-bottom:1px solid var(--panel-line);
   }
-  .navrow{display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:10px 0;}
+  .navrow{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;transition:padding .2s ease;}
   .brand{display:flex;align-items:center;gap:12px;font-family:var(--font-display);letter-spacing:0.02em;}
   .brand-mark-img{
-    width:80px;height:80px;border-radius:50%;object-fit:cover;
+    width:60px;height:60px;border-radius:50%;object-fit:cover;
     border:1px solid var(--panel-line);
+    transition:width .2s ease,height .2s ease;
   }
   .brand-text{font-size:17px;font-weight:700;line-height:1.15;text-transform:uppercase;letter-spacing:0.03em;color:var(--ink);}
   .brand-text small{display:block;font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.14em;color:var(--ink-dim);font-weight:400;text-transform:uppercase;margin-top:3px;}
+  /* compact header once the page is scrolled */
+  header.scrolled .navrow{padding:5px 20px;}
+  header.scrolled .brand-mark-img{width:44px;height:44px;}
   @media (max-width:560px){
-    .brand-mark-img{width:56px;height:56px;}
+    .brand-mark-img{width:48px;height:48px;}
+    header.scrolled .brand-mark-img{width:40px;height:40px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .navrow,.brand-mark-img,nav.mainnav{transition:none !important;}
   }
   nav.mainnav{display:flex;gap:28px;align-items:center;}
   nav.mainnav a{font-size:14px;color:var(--ink-dim);transition:color .15s;}
@@ -92,7 +102,10 @@
     nav.mainnav{position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--panel-line);flex-direction:column;align-items:flex-start;padding:18px 20px;gap:16px;transform:translateY(-130%);transition:transform .2s ease;z-index:-1;}
     nav.mainnav.open{transform:translateY(0);z-index:1;}
     .navtoggle{display:block;}
-    nav.mainnav a{padding:8px 0;font-size:16px;}
+    nav.mainnav{visibility:hidden;max-height:calc(100vh - 70px);overflow-y:auto;}
+    nav.mainnav.open{visibility:visible;}
+    nav.mainnav a{padding:11px 0;font-size:16px;width:100%;}
+    nav.mainnav a.call-btn{width:auto;}
     .call-btn{display:none;}
     nav.mainnav .call-btn{display:inline-block;margin-top:6px;padding:13px 20px;}
   }
@@ -119,8 +132,8 @@
   .eyebrow::before{content:'';width:26px;height:1px;background:var(--green);display:inline-block;}
   h1{
     font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-    font-size:clamp(40px,7vw,72px);line-height:0.98;letter-spacing:0.005em;
-    max-width:780px;
+    font-size:clamp(36px,5.6vw,64px);line-height:1;letter-spacing:0.005em;
+    max-width:1000px;
   }
   h1 span{color:var(--green);}
   .hero-sub{
@@ -174,6 +187,10 @@
   .route-svg circle.hub{fill:var(--green);}
   .route-svg text{font-family:var(--font-mono);font-size:12.5px;fill:var(--ink-dim);}
   .route-svg text.hubtext{fill:var(--ink);font-weight:700;}
+  .route-svg text.far{font-size:10.5px;letter-spacing:0.08em;opacity:0.75;}
+  .route-svg text.compass{font-size:11px;fill:var(--green);font-weight:700;}
+  .route-svg .compass-line{stroke:var(--green);stroke-width:1.5;fill:none;}
+  .route-svg{max-width:560px;margin:0 auto;display:block;}
   .area-list{list-style:none;}
   .area-list li{
     display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--panel-line);
@@ -211,6 +228,8 @@
     padding:48px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;
   }
   @media (max-width:1024px){.contact-panel{grid-template-columns:1fr;padding:32px 24px;}}
+  @media (max-width:560px){.contact-panel{padding:24px 16px;gap:28px;}}
+  .contact-panel > *{min-width:0;}
   .contact-panel h2{margin-bottom:14px;}
   .contact-actions{display:flex;flex-direction:column;gap:14px;}
   .contact-row{
@@ -218,8 +237,10 @@
     border:1px solid var(--panel-line);border-radius:3px;padding:16px 18px;
   }
   .contact-row .label{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-dim);letter-spacing:0.1em;text-transform:uppercase;}
-  .contact-row .value{font-size:16px;font-weight:600;margin-top:2px;}
-  .contact-row .go{font-family:var(--font-mono);font-size:13px;color:var(--green);}
+  .contact-row{gap:12px;min-height:56px;}
+  .contact-row > div:first-child{min-width:0;}
+  .contact-row .value{font-size:16px;font-weight:600;margin-top:2px;overflow-wrap:anywhere;}
+  .contact-row .go{font-family:var(--font-mono);font-size:13px;color:var(--green);white-space:nowrap;flex:none;}
 
   /* ---------- QUOTE FORM ---------- */
   .quote-form{display:flex;flex-direction:column;gap:16px;}
@@ -240,13 +261,31 @@
     color:var(--ink);font-family:var(--font-body);font-size:16px;padding:11px 12px;
   }
   .quote-form input[type="date"]{color-scheme:dark;}
-  .quote-form input:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green);}
+  .quote-form input,.quote-form select,.quote-form textarea{width:100%;min-width:0;}
+  .quote-form input[type="checkbox"],.quote-form input[type="radio"]{width:18px;height:18px;flex:none;}
+  .quote-form input[type="text"],.quote-form input[type="number"],.quote-form input[type="tel"],
+  .quote-form input[type="date"],.quote-form input[type="email"],.quote-form select{min-height:46px;}
+  .quote-form input[type="date"]{-webkit-appearance:none;appearance:none;}
+  .quote-form input:focus,.quote-form select:focus,.quote-form textarea:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green);}
+  .more-details{border:1px solid var(--panel-line);border-radius:3px;}
+  .more-details summary{
+    list-style:none;cursor:pointer;padding:14px 16px;min-height:48px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    font-family:var(--font-mono);font-size:13.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--green);
+  }
+  .more-details summary::-webkit-details-marker{display:none;}
+  .more-details summary::after{content:'+';font-size:20px;line-height:1;}
+  .more-details[open] summary::after{content:'\2212';}
+  .more-details[open] summary{border-bottom:1px solid var(--panel-line);}
+  .more-details summary small{display:block;font-family:var(--font-body);font-size:13.5px;letter-spacing:0;text-transform:none;color:var(--ink-dim);margin-top:3px;}
+  .more-details-body{display:flex;flex-direction:column;gap:16px;padding:18px 16px;}
   .radio-group{display:flex;gap:18px;flex-wrap:wrap;margin-top:4px;}
   .radio-group label{
     flex:none;flex-direction:row;align-items:center;gap:8px;
     font-family:var(--font-body);font-size:16px;color:var(--ink);text-transform:none;letter-spacing:0;
   }
-  .radio-group input[type="radio"]{accent-color:var(--green);width:16px;height:16px;}
+  .radio-group label{min-height:32px;flex:0 1 auto;min-width:0;}
+  .radio-group input[type="radio"],.radio-group input[type="checkbox"]{accent-color:var(--green);}
   .form-group-label{font-family:var(--font-mono);font-size:13px;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;display:block;}
   .quote-submit{
     font-family:var(--font-mono);font-size:16px;font-weight:700;letter-spacing:0.02em;
@@ -260,9 +299,9 @@
   .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--font-mono);font-size:13px;color:var(--ink-dim);letter-spacing:0.02em;}
 </style>
 </head>
-<body class="plate-tex">
+<body class="plate-tex" id="top">
 
-<header>
+<header id="siteHeader">
   <div class="wrap navrow">
     <a href="#top" class="brand">
       <img class="brand-mark-img" src="gator-logo.png" alt="Green Gator Enterprises LLC logo">
@@ -280,12 +319,12 @@
   </div>
 </header>
 
-<section class="hero" id="top">
+<section class="hero">
   <div class="hero-photo" role="img" aria-label="Green Gator Enterprises box truck at a fuel stop at dusk"></div>
   <div class="wrap">
-    <div class="eyebrow">Augusta / CSRA · Owner Operated Carrier</div>
-    <h1><span>Augusta</span> based,<br>CSRA ready.</h1>
-    <p class="hero-sub">A 26FT liftgate box truck and one owner operator who answers the phone. LTL, final mile, and dedicated local routes across the Augusta / CSRA region. Direct communication, dependable scheduling, and accountable service.</p>
+    <div class="eyebrow">Augusta based · CSRA ready</div>
+    <h1>26FT liftgate box truck.<br><span>Augusta, GA</span> based.</h1>
+    <p class="hero-sub">One owner operator who answers the phone. LTL, final mile, and dedicated local routes across Augusta and the Central Savannah River Area (CSRA). Direct communication, dependable scheduling, and accountable service.</p>
     <div class="hero-ctas">
       <a href="tel:+17067269949" class="btn-primary">CALL (706) 726-9949</a>
       <a href="sms:+17067269949" class="btn-secondary">TEXT ME</a>
@@ -341,27 +380,39 @@
       </ul>
       <p class="section-desc" style="margin-top:18px;">Extended runs within 200 miles of Augusta available when scheduled in advance.</p>
     </div>
-    <svg class="route-svg" viewBox="0 0 320 320" role="img" aria-label="Service area route diagram">
-      <line class="line-active" x1="160" y1="160" x2="160" y2="80"/>
-      <line class="line-active" x1="160" y1="160" x2="235" y2="120"/>
-      <line class="line-active" x1="160" y1="160" x2="235" y2="200"/>
-      <line class="line-active" x1="160" y1="160" x2="160" y2="245"/>
-      <line class="line-active" x1="160" y1="160" x2="85" y2="120"/>
-      <line class="line-active" x1="160" y1="160" x2="70" y2="190"/>
-      <line class="line-active" x1="160" y1="160" x2="260" y2="60"/>
-      <line class="line-active" x1="160" y1="160" x2="255" y2="270"/>
+    <svg class="route-svg" viewBox="0 0 400 320" role="img" aria-label="Service area diagram, north at top, not to scale. Martinez and Evans are northwest of Augusta. Grovetown, Harlem and Thomson run west. North Augusta is just north across the river, Aiken is northeast, and Waynesboro is south. Atlanta lies further west, Columbia northeast, and Savannah southeast.">
+      <!-- regional directions (dim) -->
+      <line class="line" x1="58" y1="138" x2="6" y2="130"/>
+      <line class="line" x1="265" y1="135" x2="392" y2="42"/>
+      <line class="line" x1="265" y1="135" x2="338" y2="306"/>
+      <text class="far" x="6" y="122">TO ATLANTA</text>
+      <text class="far" x="394" y="34" text-anchor="end">TO COLUMBIA</text>
+      <text class="far" x="394" y="312" text-anchor="end">TO SAVANNAH</text>
 
-      <circle class="hub" cx="160" cy="160" r="7"/>
-      <text class="hubtext" x="172" y="164">AUGUSTA</text>
+      <!-- west corridor: Grovetown, Harlem, Thomson -->
+      <polyline class="line-active" points="265,135 190,143 128,150 58,138"/>
+      <!-- northwest corridor: Martinez, Evans -->
+      <polyline class="line-active" points="265,135 225,100 188,78"/>
+      <line class="line-active" x1="265" y1="135" x2="278" y2="100"/>
+      <line class="line-active" x1="265" y1="135" x2="362" y2="94"/>
+      <line class="line-active" x1="265" y1="135" x2="256" y2="270"/>
 
-      <circle cx="160" cy="80" r="4"/><text x="172" y="84">MARTINEZ</text>
-      <circle cx="235" cy="120" r="4"/><text x="247" y="124">EVANS</text>
-      <circle cx="235" cy="200" r="4"/><text x="247" y="204">GROVETOWN</text>
-      <circle cx="160" cy="245" r="4"/><text x="172" y="249">HARLEM</text>
-      <circle cx="85" cy="120" r="4"/><text x="20" y="116">N. AUGUSTA, SC</text>
-      <circle cx="70" cy="190" r="4"/><text x="8" y="194">AIKEN, SC</text>
-      <circle cx="260" cy="60" r="4"/><text x="240" y="48">THOMSON</text>
-      <circle cx="255" cy="270" r="4"/><text x="235" y="288">WAYNESBORO</text>
+      <circle class="hub" cx="265" cy="135" r="7"/>
+      <text class="hubtext" x="278" y="151">AUGUSTA</text>
+
+      <circle cx="225" cy="100" r="4"/><text x="216" y="116" text-anchor="end">MARTINEZ</text>
+      <circle cx="188" cy="78" r="4"/><text x="188" y="66" text-anchor="middle">EVANS</text>
+      <circle cx="190" cy="143" r="4"/><text x="190" y="165" text-anchor="middle">GROVETOWN</text>
+      <circle cx="128" cy="150" r="4"/><text x="128" y="138" text-anchor="middle">HARLEM</text>
+      <circle cx="58" cy="138" r="4"/><text x="58" y="160" text-anchor="middle">THOMSON</text>
+      <circle cx="278" cy="100" r="4"/><text x="278" y="88" text-anchor="middle">N. AUGUSTA</text>
+      <circle cx="362" cy="94" r="4"/><text x="362" y="82" text-anchor="middle">AIKEN</text>
+      <circle cx="256" cy="270" r="4"/><text x="244" y="274" text-anchor="end">WAYNESBORO</text>
+
+      <!-- compass -->
+      <line class="compass-line" x1="22" y1="40" x2="22" y2="18"/>
+      <polyline class="compass-line" points="17,24 22,17 27,24"/>
+      <text class="compass" x="22" y="54" text-anchor="middle">N</text>
     </svg>
   </div>
 </section>
@@ -447,20 +498,22 @@
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
           <div class="form-row">
             <label>Full Name
-              <input type="text" id="q-name" name="Name" placeholder="Your name" required>
+              <input type="text" id="q-name" name="Name" placeholder="Your name" autocomplete="name" required>
             </label>
-            <label>Company Name
-              <input type="text" id="q-company" name="Company" placeholder="Company or organization">
+            <label>Pickup date (if known)
+              <input type="date" id="q-date" name="Date Requested">
             </label>
           </div>
           <div class="form-row">
-            <label>Pickup address or city/state (optional)
-              <input type="text" id="q-paddress" name="Pickup address" placeholder="Street address or city, state">
+            <label>Contact Phone
+              <input type="tel" id="q-phone" name="Contact Phone" placeholder="(xxx) xxx-xxxx" autocomplete="tel" inputmode="tel" aria-describedby="contactHint quoteError">
             </label>
-            <label>Delivery address or city/state (optional)
-              <input type="text" id="q-daddress" name="Delivery address" placeholder="Street address or city, state">
+            <label>Contact Email
+              <input type="email" id="q-email" name="Contact Email" placeholder="you@company.com" autocomplete="email" aria-describedby="contactHint quoteError">
             </label>
           </div>
+          <p class="quote-note" id="contactHint">Phone or email. One is enough.</p>
+          <p class="quote-error" id="quoteError" role="alert" style="display:none;color:#ff5c5c;font-size:14px;margin-top:-8px;">Please provide a phone number or an email so I can reach you back.</p>
           <div class="form-row">
             <label>Pickup ZIP
               <input type="text" id="q-pzip" name="Pickup ZIP" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="30907" required>
@@ -469,103 +522,105 @@
               <input type="text" id="q-dzip" name="Delivery ZIP" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="30901" required>
             </label>
           </div>
-          <div class="radio-group">
-            <label><input type="checkbox" id="q-paddress-unknown" name="Pickup exact address unavailable" value="Yes"> Pickup exact address not available yet</label>
-            <label><input type="checkbox" id="q-daddress-unknown" name="Delivery exact address unavailable" value="Yes"> Delivery exact address not available yet</label>
-          </div>
-          <p class="quote-note">Just exploring a lane? ZIP codes are enough to start. Exact addresses and timing can be confirmed before booking.</p>
-          <div class="form-row">
-            <label>One-time or recurring? (optional)
-              <select id="q-shipment-type" name="Shipment type">
-                <option value="">Choose request type</option>
-                <option value="One-time shipment">One-time shipment</option>
-                <option value="Recurring route">Recurring route</option>
-                <option value="Overflow / backup capacity">Overflow / backup capacity</option>
-              </select>
-            </label>
-          </div>
           <div class="form-row">
             <label>Number of Pallets
-              <input type="number" id="q-pallets" name="Pallets" min="1" placeholder="e.g. 4">
+              <input type="number" id="q-pallets" name="Pallets" min="1" inputmode="numeric" placeholder="e.g. 4">
             </label>
             <label>Weight (lbs)
-              <input type="number" id="q-weight" name="Weight (lbs)" min="1" placeholder="e.g. 2500">
+              <input type="number" id="q-weight" name="Weight (lbs)" min="1" inputmode="numeric" placeholder="e.g. 2500">
             </label>
           </div>
-          <div class="radio-group">
-            <label><input type="checkbox" id="q-weight-estimated" name="Weight is estimated" value="Yes"> Weight is estimated</label>
-          </div>
-          <p class="quote-note" id="freight-limits">Equipment limits: 8,800 lbs total freight capacity · 2,500 lbs liftgate capacity · 94″ × 94″ door clearance. For liftgate service, the weight of each individual pallet matters—not just the shipment total. Add individual pallet weights in the notes if known; final fit and loading requirements must be confirmed before booking.</p>
-          <div class="form-row">
-            <label>Freight / Commodity
-              <input type="text" id="q-commodity" name="Freight / Commodity" placeholder="e.g. palletized dry goods">
-            </label>
-            <label>Pallet dimensions (optional)
-              <input type="text" id="q-dimensions" name="Pallet dimensions" placeholder="L × W × H in inches; note mixed sizes">
-            </label>
-          </div>
-          <div class="form-row">
-            <label>Pickup date (if known)
-              <input type="date" id="q-date" name="Date Requested">
-            </label>
-            <label>Delivery date (if known)
-              <input type="date" id="q-ddate" name="Delivery date">
-            </label>
-          </div>
-          <div class="radio-group">
-            <label><input type="checkbox" id="q-delivery-flexible" name="Delivery date flexible" value="Yes"> Delivery date is flexible</label>
-          </div>
-          <div class="form-row">
-            <label>Pickup time window (if known)
-              <input type="text" id="q-pwindow" name="Pickup time window" placeholder="e.g. 8 AM–noon Eastern">
-            </label>
-            <label>Delivery time window (if known)
-              <input type="text" id="q-dwindow" name="Delivery time window" placeholder="e.g. 1–4 PM Eastern">
-            </label>
-          </div>
-          <div class="form-row">
-            <label>Timing flexibility
-              <select id="q-timing" name="Timing flexibility" required>
-                <option value="">Choose timing needs</option>
-                <option value="Flexible">Flexible</option>
-                <option value="Appointment-only">Appointment-only</option>
-                <option value="Mixed — see notes">Mixed — see notes</option>
-                <option value="Unsure">Unsure</option>
-              </select>
-            </label>
-          </div>
-          <p class="quote-note">Include the time zone. For mixed timing, add each location's appointment or flexibility details in the notes.</p>
-          <div class="form-row stack">
-            <span class="form-group-label" id="pickup-access-label">Pickup access</span>
-            <div class="radio-group" role="radiogroup" aria-labelledby="pickup-access-label">
-              <label><input type="radio" name="Pickup" value="Loading dock" required> Loading dock</label>
-              <label><input type="radio" name="Pickup" value="Forklift available"> Forklift available</label>
-              <label><input type="radio" name="Pickup" value="Liftgate needed"> Liftgate needed</label>
-              <label><input type="radio" name="Pickup" value="Unsure"> Unsure</label>
+          <p class="quote-note">Limits: 8,800 lbs total · 2,500 lbs liftgate capacity · 94″ × 94″ door clearance.</p>
+          <details class="more-details" id="moreDetails">
+            <summary><span>Add load details (optional)<small>Addresses, access, timing, dimensions. Skip it if you just need a rate.</small></span></summary>
+            <div class="more-details-body">
+              <div class="form-row">
+                <label>Company Name
+                  <input type="text" id="q-company" name="Company" placeholder="Company or organization" autocomplete="organization">
+                </label>
+                <label>One-time or recurring?
+                  <select id="q-shipment-type" name="Shipment type">
+                    <option value="">Choose request type</option>
+                    <option value="One-time shipment">One-time shipment</option>
+                    <option value="Recurring route">Recurring route</option>
+                    <option value="Overflow / backup capacity">Overflow / backup capacity</option>
+                  </select>
+                </label>
+              </div>
+              <div class="form-row">
+                <label>Pickup address or city/state
+                  <input type="text" id="q-paddress" name="Pickup address" placeholder="Street address or city, state">
+                </label>
+                <label>Delivery address or city/state
+                  <input type="text" id="q-daddress" name="Delivery address" placeholder="Street address or city, state">
+                </label>
+              </div>
+              <div class="radio-group">
+                <label><input type="checkbox" id="q-paddress-unknown" name="Pickup exact address unavailable" value="Yes"> Pickup exact address not available yet</label>
+                <label><input type="checkbox" id="q-daddress-unknown" name="Delivery exact address unavailable" value="Yes"> Delivery exact address not available yet</label>
+              </div>
+              <div class="form-row">
+                <label>Freight / Commodity
+                  <input type="text" id="q-commodity" name="Freight / Commodity" placeholder="e.g. palletized dry goods">
+                </label>
+                <label>Pallet dimensions
+                  <input type="text" id="q-dimensions" name="Pallet dimensions" placeholder="L × W × H in inches; note mixed sizes">
+                </label>
+              </div>
+              <div class="radio-group">
+                <label><input type="checkbox" id="q-weight-estimated" name="Weight is estimated" value="Yes"> Weight is estimated</label>
+              </div>
+              <p class="quote-note" id="freight-limits">Equipment limits: 8,800 lbs total freight capacity · 2,500 lbs liftgate capacity · 94″ × 94″ door clearance. For liftgate service, the weight of each individual pallet matters—not just the shipment total. Add individual pallet weights in the notes if known; final fit and loading requirements must be confirmed before booking.</p>
+              <div class="form-row">
+                <label>Delivery date (if known)
+                  <input type="date" id="q-ddate" name="Delivery date">
+                </label>
+                <label>Timing flexibility
+                  <select id="q-timing" name="Timing flexibility">
+                    <option value="">Choose timing needs</option>
+                    <option value="Flexible">Flexible</option>
+                    <option value="Appointment-only">Appointment-only</option>
+                    <option value="Mixed — see notes">Mixed — see notes</option>
+                    <option value="Unsure">Unsure</option>
+                  </select>
+                </label>
+              </div>
+              <div class="radio-group">
+                <label><input type="checkbox" id="q-delivery-flexible" name="Delivery date flexible" value="Yes"> Delivery date is flexible</label>
+              </div>
+              <div class="form-row">
+                <label>Pickup time window (if known)
+                  <input type="text" id="q-pwindow" name="Pickup time window" placeholder="e.g. 8 AM–noon Eastern">
+                </label>
+                <label>Delivery time window (if known)
+                  <input type="text" id="q-dwindow" name="Delivery time window" placeholder="e.g. 1–4 PM Eastern">
+                </label>
+              </div>
+              <p class="quote-note">Include the time zone. For mixed timing, add each location's appointment or flexibility details in the notes.</p>
+              <div class="form-row stack">
+                <span class="form-group-label" id="pickup-access-label">Pickup access</span>
+                <div class="radio-group" role="radiogroup" aria-labelledby="pickup-access-label">
+                  <label><input type="radio" name="Pickup" value="Loading dock"> Loading dock</label>
+                  <label><input type="radio" name="Pickup" value="Forklift available"> Forklift available</label>
+                  <label><input type="radio" name="Pickup" value="Liftgate needed"> Liftgate needed</label>
+                  <label><input type="radio" name="Pickup" value="Unsure"> Unsure</label>
+                </div>
+              </div>
+              <div class="form-row stack">
+                <span class="form-group-label" id="delivery-access-label">Delivery access</span>
+                <div class="radio-group" role="radiogroup" aria-labelledby="delivery-access-label">
+                  <label><input type="radio" name="Dropoff" value="Loading dock"> Loading dock</label>
+                  <label><input type="radio" name="Dropoff" value="Forklift available"> Forklift available</label>
+                  <label><input type="radio" name="Dropoff" value="Liftgate needed"> Liftgate needed</label>
+                  <label><input type="radio" name="Dropoff" value="Unsure"> Unsure</label>
+                </div>
+              </div>
+              <p class="quote-note">Truck clearance is 94" x 94". Flag it in the notes below if your freight runs larger.</p>
             </div>
-          </div>
+          </details>
           <div class="form-row stack">
-            <span class="form-group-label" id="delivery-access-label">Delivery access</span>
-            <div class="radio-group" role="radiogroup" aria-labelledby="delivery-access-label">
-              <label><input type="radio" name="Dropoff" value="Loading dock" required> Loading dock</label>
-              <label><input type="radio" name="Dropoff" value="Forklift available"> Forklift available</label>
-              <label><input type="radio" name="Dropoff" value="Liftgate needed"> Liftgate needed</label>
-              <label><input type="radio" name="Dropoff" value="Unsure"> Unsure</label>
-            </div>
-          </div>
-          <p class="quote-note">Truck clearance is 94" x 94". Flag it in the notes below if your freight runs larger.</p>
-          <div class="form-row">
-            <label>Contact Phone
-              <input type="tel" id="q-phone" name="Contact Phone" placeholder="(xxx) xxx-xxxx">
-            </label>
-            <label>Contact Email
-              <input type="email" id="q-email" name="Contact Email" placeholder="you@company.com">
-            </label>
-          </div>
-          <p class="quote-error" id="quoteError" style="display:none;color:#ff5c5c;font-size:13px;margin-top:-8px;">Please provide a phone number or an email so I can reach you back.</p>
-          <div class="form-row stack">
-            <label>Additional Notes
-              <textarea id="q-notes" name="Additional Notes" rows="3" placeholder="Anything else I should know" style="background:var(--bg);border:1px solid var(--panel-line);border-radius:3px;color:var(--ink);font-family:var(--font-body);font-size:16px;padding:11px 12px;resize:vertical;"></textarea>
+            <label>Notes (optional)
+              <textarea id="q-notes" name="Additional Notes" rows="3" placeholder="What's moving, and anything else I should know" style="background:var(--bg);border:1px solid var(--panel-line);border-radius:3px;color:var(--ink);font-family:var(--font-body);font-size:16px;padding:11px 12px;resize:vertical;"></textarea>
             </label>
           </div>
           <button type="submit" class="quote-submit" id="quoteSubmitBtn">Request a Truck</button>
@@ -595,7 +650,7 @@
           <div class="go">TEXT →</div>
         </a>
         <div class="contact-row" style="cursor:default;">
-          <div><div class="label">Hours</div><div class="value">Calls 07:30–20:30 · Text/Email <span style="color:var(--green);">24/7</span></div></div>
+          <div><div class="label">Hours</div><div class="value">Calls 07:30–20:30 Eastern Time · Text/Email <span style="color:var(--green);">24/7</span></div></div>
         </div>
         <a class="contact-row" href="mailto:info@greengatorenterprises.com">
           <div><div class="label">Email</div><div class="value">info@greengatorenterprises.com</div></div>
@@ -691,6 +746,17 @@
       navToggle.setAttribute('aria-expanded','false');
     });
   });
+
+  var siteHeader = document.getElementById('siteHeader');
+  var headerSmall = false;
+  function syncHeader(){
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    // two thresholds so the size change can never flip back and forth
+    if(!headerSmall && y > 70){ headerSmall = true; siteHeader.classList.add('scrolled'); }
+    else if(headerSmall && y < 10){ headerSmall = false; siteHeader.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', syncHeader, {passive:true});
+  syncHeader();
 
   var quoteForm = document.getElementById('quoteForm');
   var quoteError = document.getElementById('quoteError');

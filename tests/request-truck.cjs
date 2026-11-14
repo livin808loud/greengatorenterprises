@@ -2,12 +2,17 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 (async () => {
-  const browser = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true});
+  const browser = await chromium.launch({executablePath:process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true});
   try {
     const page = await browser.newPage({viewport:{width:390,height:844}});
     await page.goto(process.env.TEST_URL || 'file://' + path.resolve(__dirname,'../index.html') + '#quote');
     await page.locator('#quoteSubmitBtn').waitFor();
     assert.equal(await page.locator('#quoteSubmitBtn').textContent(),'Request a Truck');
+    // Short form first: only the quick-rate fields show until the optional details are opened.
+    for (const id of ['q-name','q-phone','q-email','q-pzip','q-dzip','q-pallets','q-weight','q-date']) assert.ok(await page.locator('#'+id).isVisible(), id+' must be in the short form');
+    for (const id of ['q-paddress','q-timing','q-dimensions']) assert.equal(await page.locator('#'+id).isVisible(), false, id+' starts collapsed');
+    assert.deepEqual(await page.locator('#quoteForm [required]').evaluateAll(els=>els.map(e=>e.id)),['q-name','q-pzip','q-dzip'],'Nothing inside the collapsed details may be required');
+    await page.locator('#moreDetails summary').click();
     await page.locator('#q-name').fill('WEBSITE TEST — not a booking');
     for (const [id,value] of Object.entries({'q-paddress':'123 Test Street, Augusta, GA','q-daddress':'456 Test Road, Aiken, SC','q-pzip':'30907','q-dzip':'30901','q-pallets':'2','q-weight':'1200','q-commodity':'TEST ONLY','q-date':'2027-01-15','q-ddate':'2027-01-15','q-pwindow':'9 AM–noon Eastern','q-dwindow':'1–4 PM Eastern','q-dimensions':'48 x 40 x 48 inches','q-email':'test@example.com'})) await page.locator('#'+id).fill(value);
     for (const group of ['Pickup','Dropoff']) {
